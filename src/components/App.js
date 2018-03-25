@@ -3,6 +3,7 @@ import Header from "./Header";
 import Inventory from "./Inventory";
 import Order from "./Order";
 import sampleFishes from "../sample-fishes";
+import Fish from "./Fish";
 
 class App extends React.Component {
   state = {
@@ -23,11 +24,30 @@ class App extends React.Component {
     this.setState({ fishes: sampleFishes });
   };
 
+  addToOrder = key => {
+    // 1. Get a copy of the state
+    const order = { ...this.state.order };
+    // 2. Add to the order or update it
+    order[key] = order[key] + 1 || 1;
+    // 3. Call setState to update the order
+    this.setState({ order });
+  };
+
   render() {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
+          <ul className="fishes">
+            {Object.keys(this.state.fishes).map(key => (
+              <Fish
+                key={key}
+                index={key}
+                details={this.state.fishes[key]}
+                addToOrder={this.addToOrder}
+              />
+            ))}
+          </ul>
         </div>
         <Order />
         <Inventory
